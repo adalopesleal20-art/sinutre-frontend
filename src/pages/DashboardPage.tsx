@@ -70,7 +70,7 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
     }).length;
 
     const monthCount = meals.filter((meal) => {
-      const date = new Date(meal.createdAt);
+      const date = new Date(meal.eatTime);
 
       return (
         date.getMonth() === today.getMonth() &&
@@ -85,6 +85,35 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
     };
   }, [meals]);
 
+  const macroSummary = useMemo(() => {
+    const today = new Date();
+    return meals.filter((meal) => {
+      const date = new Date(meal.eatTime);
+      return (
+        date.getDay() === today.getDay() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    }).reduce(
+      (acc, meal) => {
+        acc.carbs += meal.totals.carbs;
+        acc.proteins += meal.totals.proteins;
+        acc.fats += meal.totals.fats;
+        acc.calories += meal.totals.calories;
+
+        return acc;
+      },
+      {
+        carbs: 0,
+        proteins: 0,
+        fats: 0,
+        calories: 0,
+
+        caloriesGoal: 1000, //ainda não veio do banco de dados
+      },
+    );
+  }, [meals]);
+
 
   return (
     <>
@@ -95,7 +124,7 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
           avatarUrl={user.avatarUrl}
         />
 
-        <MacroStatsBar summary={MACRO_SUMMARY} />
+        <MacroStatsBar summary={macroSummary} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 items-stretch">
           <TotalMealsCard summary={mealsSummary} />

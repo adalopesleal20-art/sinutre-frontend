@@ -15,7 +15,7 @@ export function MacroStatsBar({ summary }: MacroStatsBarProps) {
         label="Calorias / Meta Diária"
         value={summary.calories}
         unit="kcal"
-        variant="highlight"
+        variant={(summary.calories<summary.caloriesGoal)? 'highlight' : 'danger'}
         goal={summary.caloriesGoal}
         hint="kcal"
       />
