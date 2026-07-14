@@ -2,7 +2,7 @@
 import { NAV_ITEMS } from '@/constants/navigation';
 import { SidebarBrand } from './SidebarBrand';
 import { SidebarItem } from './SidebarItem';
-
+import { useAuth } from '@/context/AuthContext';
 interface SidebarProps {
   drawerId: string;
 }
@@ -10,7 +10,7 @@ interface SidebarProps {
 export function Sidebar({ drawerId }: SidebarProps) {
  // const [activeId, setActiveId] = useState<string>('home');
   const expanded = true;
-
+const { logout } = useAuth();
   return (
     <aside className="drawer-side z-50">
       <label
@@ -35,6 +35,14 @@ export function Sidebar({ drawerId }: SidebarProps) {
             />
           ))}
         </ul>
+        <div className="w-full p-4 border-t border-base-200">
+  <button
+    onClick={logout}
+    className="btn btn-outline btn-error w-full"
+  >
+    Sair
+  </button>
+</div>
       </div>
     </aside>
   );
