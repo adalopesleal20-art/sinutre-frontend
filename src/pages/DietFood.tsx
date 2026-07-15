@@ -4,7 +4,11 @@ import { Plus } from '@phosphor-icons/react';
 import { SimpleHeader } from '@/components/layout/SimpleHeader';
 import { AddFoodModal } from '@/components/modal/AddFoodModal';
 
-import { getFoods } from '@/services/foodService';
+import {
+  deleteFood,
+  getFoods,
+} from '@/services/foodService';
+
 import type { Food } from '@/types/food';
 
 const MODAL_ID = 'create-food-modal';
@@ -19,6 +23,25 @@ export function DietFoodPage() {
       setFoods(data);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleDelete(id: number) {
+    const confirmed = window.confirm(
+      'Deseja realmente excluir este alimento?',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteFood(id);
+      await loadFoods();
+    } catch {
+      window.alert(
+        'Não foi possível excluir o alimento.',
+      );
     }
   }
 
@@ -64,6 +87,18 @@ export function DietFoodPage() {
                     🥑 {food.fatPer100g} g
                   </span>
                 </div>
+
+                <div className="card-actions justify-end mt-4">
+                  <button
+                    type="button"
+                    className="btn btn-error btn-sm"
+                    onClick={() =>
+                      handleDelete(food.id)
+                    }
+                  >
+                    Excluir
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -71,6 +106,8 @@ export function DietFoodPage() {
       )}
 
       <button
+        type="button"
+        aria-label="Adicionar alimento"
         className="btn btn-primary btn-circle btn-lg fixed bottom-6 right-6 shadow-lg z-50"
         onClick={() =>
           (
