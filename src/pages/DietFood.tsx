@@ -3,6 +3,7 @@ import { Plus } from '@phosphor-icons/react';
 
 import { SimpleHeader } from '@/components/layout/SimpleHeader';
 import { AddFoodModal } from '@/components/modal/AddFoodModal';
+import { EditFoodModal } from '@/components/modal/EditFoodModal';
 
 import {
   deleteFood,
@@ -11,11 +12,14 @@ import {
 
 import type { Food } from '@/types/food';
 
-const MODAL_ID = 'create-food-modal';
+const CREATE_MODAL_ID = 'create-food-modal';
+const EDIT_MODAL_ID = 'edit-food-modal';
 
 export function DietFoodPage() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFood, setSelectedFood] =
+    useState<Food | null>(null);
 
   async function loadFoods() {
     try {
@@ -43,6 +47,18 @@ export function DietFoodPage() {
         'Não foi possível excluir o alimento.',
       );
     }
+  }
+
+  function handleEdit(food: Food) {
+    setSelectedFood(food);
+
+    setTimeout(() => {
+      (
+        document.getElementById(
+          EDIT_MODAL_ID,
+        ) as HTMLDialogElement
+      )?.showModal();
+    }, 0);
   }
 
   useEffect(() => {
@@ -91,6 +107,16 @@ export function DietFoodPage() {
                 <div className="card-actions justify-end mt-4">
                   <button
                     type="button"
+                    className="btn btn-warning btn-sm"
+                    onClick={() =>
+                      handleEdit(food)
+                    }
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
                     className="btn btn-error btn-sm"
                     onClick={() =>
                       handleDelete(food.id)
@@ -112,7 +138,7 @@ export function DietFoodPage() {
         onClick={() =>
           (
             document.getElementById(
-              MODAL_ID,
+              CREATE_MODAL_ID,
             ) as HTMLDialogElement
           )?.showModal()
         }
@@ -121,8 +147,14 @@ export function DietFoodPage() {
       </button>
 
       <AddFoodModal
-        modalId={MODAL_ID}
+        modalId={CREATE_MODAL_ID}
         onCreated={loadFoods}
+      />
+
+      <EditFoodModal
+        modalId={EDIT_MODAL_ID}
+        food={selectedFood}
+        onUpdated={loadFoods}
       />
     </div>
   );

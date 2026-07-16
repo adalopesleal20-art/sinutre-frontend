@@ -1,15 +1,19 @@
-import { useState } from 'react';
-import { createFood } from '@/services/foodService';
+import { useEffect, useState } from 'react';
 
-interface AddFoodModalProps {
+import { updateFood } from '@/services/foodService';
+import type { Food } from '@/types/food';
+
+interface EditFoodModalProps {
   modalId: string;
-  onCreated: () => Promise<void> | void;
+  food: Food | null;
+  onUpdated: () => Promise<void> | void;
 }
 
-export function AddFoodModal({
+export function EditFoodModal({
   modalId,
-  onCreated,
-}: AddFoodModalProps) {
+  food,
+  onUpdated,
+}: EditFoodModalProps) {
   const [name, setName] = useState('');
   const [caloriesPer100g, setCaloriesPer100g] =
     useState('');
@@ -21,75 +25,57 @@ export function AddFoodModal({
     useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!food) {
+      return;
+    }
+
+    setName(food.name);
+    setCaloriesPer100g(
+      String(food.caloriesPer100g),
+    );
+    setCarbsPer100g(
+      String(food.carbsPer100g),
+    );
+    setProteinPer100g(
+      String(food.proteinPer100g),
+    );
+    setFatPer100g(
+      String(food.fatPer100g),
+    );
+  }, [food]);
+
   async function handleSave() {
-    const calories = Number(caloriesPer100g);
-    const carbs = Number(carbsPer100g);
-    const protein = Number(proteinPer100g);
-    const fat = Number(fatPer100g);
-
-    if (!name.trim()) {
-      window.alert(
-        'Digite o nome do alimento.',
-      );
-      return;
-    }
-
-    if (!caloriesPer100g || calories <= 0) {
-      window.alert(
-        'Informe uma quantidade de calorias maior que zero.',
-      );
-      return;
-    }
-
-    if (!carbsPer100g || carbs < 0) {
-      window.alert(
-        'Informe uma quantidade válida de carboidratos.',
-      );
-      return;
-    }
-
-    if (!proteinPer100g || protein < 0) {
-      window.alert(
-        'Informe uma quantidade válida de proteínas.',
-      );
-      return;
-    }
-
-    if (!fatPer100g || fat < 0) {
-      window.alert(
-        'Informe uma quantidade válida de gorduras.',
-      );
+    if (!food) {
       return;
     }
 
     try {
       setLoading(true);
 
-      await createFood({
-        name: name.trim(),
-        caloriesPer100g: calories,
-        carbsPer100g: carbs,
-        proteinPer100g: protein,
-        fatPer100g: fat,
+      await updateFood(food.id, {
+        name,
+        caloriesPer100g: Number(
+          caloriesPer100g,
+        ),
+        carbsPer100g: Number(
+          carbsPer100g,
+        ),
+        proteinPer100g: Number(
+          proteinPer100g,
+        ),
+        fatPer100g: Number(
+          fatPer100g,
+        ),
       });
 
-      setName('');
-      setCaloriesPer100g('');
-      setCarbsPer100g('');
-      setProteinPer100g('');
-      setFatPer100g('');
-
-      await onCreated();
+      await onUpdated();
 
       (
         document.getElementById(
           modalId,
         ) as HTMLDialogElement
       )?.close();
-    } catch {
-      window.alert(
-        'Não foi possível cadastrar o alimento.',
-      );
     } finally {
       setLoading(false);
     }
@@ -99,7 +85,7 @@ export function AddFoodModal({
     <dialog id={modalId} className="modal">
       <div className="modal-box">
         <h3 className="font-bold text-lg">
-          Novo alimento
+          Editar alimento
         </h3>
 
         <div className="space-y-3 mt-4">
@@ -114,7 +100,6 @@ export function AddFoodModal({
 
           <input
             type="number"
-            min="0"
             className="input input-bordered w-full"
             placeholder="Calorias por 100g"
             value={caloriesPer100g}
@@ -127,7 +112,6 @@ export function AddFoodModal({
 
           <input
             type="number"
-            min="0"
             className="input input-bordered w-full"
             placeholder="Carboidratos por 100g"
             value={carbsPer100g}
@@ -140,7 +124,6 @@ export function AddFoodModal({
 
           <input
             type="number"
-            min="0"
             className="input input-bordered w-full"
             placeholder="Proteínas por 100g"
             value={proteinPer100g}
@@ -153,7 +136,6 @@ export function AddFoodModal({
 
           <input
             type="number"
-            min="0"
             className="input input-bordered w-full"
             placeholder="Gorduras por 100g"
             value={fatPer100g}
@@ -173,14 +155,13 @@ export function AddFoodModal({
           </form>
 
           <button
-            type="button"
             className="btn btn-primary"
             disabled={loading}
             onClick={handleSave}
           >
             {loading
               ? 'Salvando...'
-              : 'Salvar'}
+              : 'Salvar alterações'}
           </button>
         </div>
       </div>

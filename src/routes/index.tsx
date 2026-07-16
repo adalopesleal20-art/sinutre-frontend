@@ -7,35 +7,19 @@ import {
 import { AppLayout } from '@/layouts/AppLayout';
 import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
-import { ProtectedRoute } from './ProtectRoute';
 import { DietFoodPage } from '@/pages/DietFood';
+import { SettingsPage } from '@/pages/SettingsPage';
+
+import { ProtectedRoute } from './ProtectRoute';
 
 export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route
           path="/login"
           element={<LoginPage />}
         />
-
-        <Route
-          element={
-            <ProtectedRoute>
-              <AppLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route
-            path="/foods"
-            element={<DietFoodPage />}
-        
-          />
-
-        </Route>
-
-       
 
         <Route
           element={
@@ -51,8 +35,16 @@ export function Router() {
             }
           />
 
-        </Route>
+          <Route
+            path="/foods"
+            element={<DietFoodPage />}
+          />
 
+          <Route
+            path="/settings"
+            element={<SettingsPage />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
