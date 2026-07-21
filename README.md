@@ -1,49 +1,61 @@
-# Nutridash
+# SiNutre
 
-Dashboard de nutrição em React, convertido a partir do protótipo HTML original
-em `../Nutridash`. Toda a estilização foi migrada para Tailwind CSS (com daisyUI
-v5 como plugin) e a UI foi quebrada em componentes reutilizáveis.
+Projeto desenvolvido como Projeto Final da Formação em Desenvolvimento Web Moderno.
 
-## Stack
+## Links do Projeto
 
-- Vite 6 + React 19 + TypeScript
-- Tailwind CSS v4 (via `@tailwindcss/vite`)
-- daisyUI v5 (plugin do Tailwind)
-- @phosphor-icons/react para os ícones
-- ESLint 9 (flat config) + typescript-eslint
+### Frontend (Vercel)
+https://sinutre-frontend-nine.vercel.app
 
-## Estrutura
+### Backend (Railway)
+https://sinutre-backend-production-6b3f.up.railway.app
 
-```
-src/
-├── components/
-│   ├── cards/      # AddMealCard, TotalMealsCard
-│   ├── forms/      # FormField
-│   ├── layout/     # Sidebar, SidebarBrand, SidebarItem, Header
-│   ├── macros/     # MacroStat, MacroStatsBar
-│   ├── meals/      # MealActionButton, MealFab, MealsList/Table…
-│   └── modal/      # AddMealModal e suas sub-partes
-├── constants/      # MEAL_CATEGORIES, NAV_ITEMS
-├── data/           # mocks de usuário, macros e refeições
-├── hooks/          # useMealModal
-├── pages/          # DashboardPage
-├── styles/         # tailwind + tema sinutre
-├── types/          # tipos de domínio
-├── App.tsx
-└── main.tsx
-```
+### Repositório Frontend
+https://github.com/adalopesleal20-art/sinutre-frontend
 
-## Scripts
+### Repositório Backend
+https://github.com/adalopesleal20-art/sinutre-backend
 
-```bash
-npm install     # instala dependências
-npm run dev     # servidor de desenvolvimento (vite)
-npm run build   # build de produção (tsc -b + vite build)
-npm run lint    # ESLint em todo o projeto
-npm run preview # preview do build
-```
+---
 
-## Tema
+## Funcionalidades Desenvolvidas
 
-O tema customizado `sinutre` (paleta verde) está definido em
-`src/styles/theme.css` usando a sintaxe `@plugin 'daisyui/theme'` do daisyUI v5.
+### Requisitos Obrigatórios
+- Projeto publicado na Vercel.
+- Backend publicado no Railway.
+- Repositórios públicos no GitHub.
+
+### Requisitos Complementares
+
+- ✅ Alterar alimento cadastrado.
+- ✅ Excluir alimento cadastrado.
+- ✅ Validação de dados no cadastro e alteração de alimentos.
+- ✅ Cadastro de peso, altura e meta calórica.
+- ✅ Alteração de peso, altura e meta calórica.
+- ✅ Exibição da meta calórica no Dashboard.
+- ✅ Aviso quando a meta calórica diária é ultrapassada.
+- ✅ Página de Progresso com métricas.
+- ✅ Cálculo do IMC com classificação.
+- ✅ Média calórica dos últimos 7 dias.
+- ✅ Logout.
+- ✅ Alteração das cores da interface.
+
+---
+
+## Tecnologias Utilizadas
+
+- React
+- TypeScript
+- Vite
+- Node.js
+- Express
+- Prisma ORM
+- SQLite
+- Railway
+- Vercel
+
+---
+
+## Autor
+
+Ada Lopes Leal
